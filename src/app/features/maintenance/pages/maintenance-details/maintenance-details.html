@@ -1,0 +1,24 @@
+<h2>Maintenance Details</h2>
+
+@let s = state();
+
+@if (s.status === 'loading') {
+  <p>Loading maintenance details...</p>
+} @else if (s.status === 'error') {
+  <p >{{ s.message }}</p>
+} @else {
+  <h2>{{ s.data.type }}</h2>
+  <p>Date: {{ s.data.date | date }}</p>
+  <p>Cost: €{{ s.data.cost }}</p>
+  <p>Car ID: {{ s.data.carId }}</p>
+
+  <a matButton="filled" [routerLink]="['/maintenance', s.data._id, 'edit']">Edit</a>
+
+  <button matButton="outlined" (click)="deleteMaintenance(s.data)" [disabled]="deleting()">
+    Delete
+  </button>
+
+  @if (deleteError(); as message) {
+    <p class="error">{{ message }}</p>
+  }
+}

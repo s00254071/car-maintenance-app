@@ -1,0 +1,62 @@
+<form [formGroup]="maintenanceForm" (ngSubmit)="onSubmit()" class="maintenance-form">
+  @if (saving()) {
+  <mat-progress-bar mode="buffer" />
+  }
+
+  <h2>Maintenance Form</h2>
+
+  @let c = cars();
+
+  <mat-form-field appearance="outline">
+    <mat-label>Car</mat-label>
+    <mat-select formControlName="carId">
+      @if (c.status === 'loaded') {
+        @for (car of c.data; track car._id) {
+        <mat-option [value]="car._id">{{ car.make }} {{ car.model }}</mat-option>
+        }
+      }
+    </mat-select>
+    @if (maintenanceForm.controls.carId.hasError('required')) {
+    <mat-error>Car is required</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Type</mat-label>
+    <mat-select formControlName="type">
+      @for (type of types; track type) {
+      <mat-option [value]="type">{{ type }}</mat-option>
+      }
+    </mat-select>
+    @if (maintenanceForm.controls.type.hasError('required')) {
+    <mat-error>Type is required</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Date</mat-label>
+    <input matInput type="date" formControlName="date" />
+    @if (maintenanceForm.controls.date.hasError('required')) {
+    <mat-error>Date is required</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Cost (€)</mat-label>
+    <input matInput type="number" formControlName="cost" placeholder="e.g. 85" />
+    @if (maintenanceForm.controls.cost.hasError('required')) {
+    <mat-error>Cost is required</mat-error>
+    } @else if (maintenanceForm.controls.cost.hasError('min')) {
+    <mat-error>Cost cannot be negative</mat-error>
+    }
+  </mat-form-field>
+
+  @if (saveError(); as message) { <p role="alert">{{ message }}</p> }
+
+  <div class="button-group">
+    <button matButton="filled" type="submit" [disabled]="saving()">
+      {{ saving() ? 'Saving...' : 'Save record' }}
+    </button>
+    <a matButton routerLink="/maintenance">Cancel</a>
+  </div>
+</form>

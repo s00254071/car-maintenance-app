@@ -1,0 +1,19 @@
+<div class="maintenance-list-container">
+  <h2>Maintenance Records</h2>
+
+  @let s = state();
+
+  @if (s.status === 'loading') {
+    <p>Loading maintenance records...</p>
+  } @else if (s.status === 'error') {
+    <p> {{ s.message }}</p>
+  } @else if (s.data.length === 0) {
+    <p>No maintenance records yet.</p>
+  } @else {
+    <div class="grid">
+      @for (record of s.data; track record._id) {
+        <app-maintenance-card [record]="record" />
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,6 @@
+<div class="card">
+    <h3>{{ record().type }}</h3>
+    <p>Date: {{ record().date | date }}</p>
+    <p>Cost: €{{ record().cost }}</p>
+    <a [routerLink]="['/maintenance', record()._id]">View Details</a>
+</div>
